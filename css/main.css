@@ -1,36 +1,80 @@
+/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
-    background-color: #f0f0f0;
+    padding: 0;
+    background-color: black;
 }
+
+/* Título principal */
 h1 {
     text-align: center;
+    color: whitesmoke;
 }
-.movies {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+
+/* Estilos del modal */
+#modal {
+    position: fixed;          /* Fijo para cubrir toda la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9); /* Fondo negro opaco */
+    display: flex;            /* Flexbox para centrar */
+    justify-content: center;  /* Centrado horizontal */
+    align-items: center;      /* Centrado vertical */
+    z-index: 1000;            /* Modal encima de todo */
 }
-.movie {
-    background: white;
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 8px;
-    width: 200px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-.movie button {
-    margin-top: 10px;
-    padding: 8px 15px;
-    border: none;
-    background-color: #007BFF;
+
+/* Contenido del modal */
+.modal-content {
+    background: rgb(5, 83, 5);        /* Color del cuadro de diálogo */
     color: white;
-    border-radius: 4px;
-    cursor: pointer;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 20px;
+    text-align: center;
+    width: 90%;               /* Ancho responsivo */
+    max-width: 550px;         /* Máximo ancho */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra leve */
 }
-.movie button:hover {
-    background-color: #0056b3;
+
+
+/* Texto dentro del modal */
+.modal-content p {
+    margin: 0 0 20px;
+    font-size: 20px;
+}
+
+/* Inputs dentro del modal */
+.modal-content input {
+    width: 95%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Botones dentro del modal */
+.modal-content button {
+    background: white;
+    color: green;
+    border: none;
+    padding: 22px 53px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 22px;
+}
+
+/* Efecto hover en botones */
+.modal-content button:hover {
+    background: #f0f0f0;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%; /* Más ajustado para dispositivos pequeños */
+    }
 }
