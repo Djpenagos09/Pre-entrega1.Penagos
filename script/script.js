@@ -1,4 +1,4 @@
-// Clase Pelicula
+
 class Pelicula {
     constructor(id, titulo, costo, disponible) {
         this.id = id;
@@ -18,7 +18,7 @@ class Pelicula {
     }
 }
 
-// Lista de películas
+
 const peliculas = [
     new Pelicula(1, "El laberinto del Fauno", 5, 3),
     new Pelicula(2, "Inception", 4, 3),
@@ -35,11 +35,11 @@ const peliculasGratis = [
     new Pelicula(5, "Little Women", 0, 2),
 ];
 
-// Variables globales
+
 let saldo = 50;
 const usuario = { nombre: "", saldo };
 
-// Elementos HTML dinámicos
+
 const modal = document.createElement('div');
 modal.id = 'modal';
 modal.innerHTML = `
@@ -87,7 +87,7 @@ const showModal = (message, input = false) => {
     });
 };
 
-// Función principal
+
 const iniciarSistema = async () => {
     do {
         usuario.nombre = await showModal("Ingresa tu nombre para continuar:", true);
@@ -124,7 +124,7 @@ const iniciarSistema = async () => {
     await showModal(`Gracias por visitarnos, ${usuario.nombre}. Tu saldo final es de $${usuario.saldo}.`);
 };
 
-// Funciones auxiliares
+
 const mostrarPeliculas = async () => {
     const listado = peliculas.map(p => {
         const costo = p.calcularCosto();
