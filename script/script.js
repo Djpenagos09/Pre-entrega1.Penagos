@@ -1,32 +1,13 @@
-// *** Manejo del saldo inicial con LocalStorage ***
-const obtenerSaldoInicial = () => {
-    return 120; // Saldo inicial fijo
-};
+localStorage.clear(); 
 
-const obtenerSaldoGuardado = () => {
-    const saldoGuardado = localStorage.getItem('saldo');
-    return saldoGuardado !== null ? JSON.parse(saldoGuardado) : obtenerSaldoInicial();
-};
 
-const guardarSaldo = (nuevoSaldo) => {
-    localStorage.setItem('saldo', JSON.stringify(nuevoSaldo));
-};
+const obtenerSaldoInicial = () => 120;
 
-const obtenerUsuarioGuardado = () => {
-    return localStorage.getItem('usuario') || "";
-};
-
-const guardarUsuario = (nombre) => {
-    localStorage.setItem('usuario', nombre);
-};
-
-// *** Inicialización del usuario con saldo y nombre ***
 const usuario = {
-    nombre: obtenerUsuarioGuardado(),
-    saldo: obtenerSaldoGuardado(),
+    nombre: "",
+    saldo: obtenerSaldoInicial(),
 };
 
-// Clase Película
 class Pelicula {
     constructor(id, titulo, costo, disponible, imagen) {
         this.id = id;
@@ -42,117 +23,138 @@ class Pelicula {
         }
     }
 
+    
     calcularCosto() {
         return this.disponible === 1 ? this.costo / 2 : this.costo;
     }
 }
 
-// *** Datos de las películas ***
-const peliculas = [
-    new Pelicula(1, "El laberinto del Fauno", 5, 3, "images/fauno.jpg"),
-    new Pelicula(2, "Inception", 4, 3, "images/inception.jpg"),
-    new Pelicula(3, "Interstellar", 6, 3, "images/interstellar.jpg"),
-    new Pelicula(4, "Matrix", 3, 3, "images/matrix.jpg"),
-    new Pelicula(5, "Avatar", 5, 3, "images/avatar.jpg"),
-];
-
-const peliculasGratis = [
-    new Pelicula(1, "Parasite", 0, 2, "images/parasite.jpg"),
-    new Pelicula(2, "1917", 0, 2, "images/1917.jpg"),
-    new Pelicula(3, "Jojo Rabbit", 0, 2, "images/jojo.jpg"),
-    new Pelicula(4, "The Irishman", 0, 2, "images/irishman.jpg"),
-    new Pelicula(5, "Little Women", 0, 2, "images/littlewomen.jpg"),
-];
-
-// *** Mostrar Películas Disponibles ***
-const mostrarPeliculas = () => {
-    const peliculasContainer = document.getElementById('peliculasContainer');
-    peliculasContainer.innerHTML = ""; // Limpia el contenedor
-
-    peliculas.forEach((pelicula) => {
-        const peliculaCard = document.createElement('div');
-        peliculaCard.classList.add('pelicula-card');
-
-        peliculaCard.innerHTML = `
-            <img src="${pelicula.imagen}" alt="${pelicula.titulo}">
-            <h3>${pelicula.titulo}</h3>
-            <p>Costo: $${pelicula.calcularCosto()}</p>
-            <p>Disponibles: ${pelicula.disponible}</p>
-            <button data-id="${pelicula.id}" class="alquilar-btn">Alquilar</button>
-        `;
-
-        peliculasContainer.appendChild(peliculaCard);
-    });
-
-    // *** Añadir evento a los botones de alquilar ***
-    const botones = document.querySelectorAll('.alquilar-btn');
-    botones.forEach((boton) => {
-        boton.addEventListener('click', (e) => {
-            const id = parseInt(e.target.dataset.id);
-            const pelicula = peliculas.find((p) => p.id === id);
-            if (pelicula) {
-                procesarAlquiler(pelicula);
-            }
-        });
-    });
-};
-
-// *** Procesar Alquiler de Películas ***
-const procesarAlquiler = async (pelicula) => {
-    const costo = pelicula.calcularCosto();
-    if (usuario.saldo < costo) {
-        mostrarMensaje(`No tienes suficiente saldo para alquilar "${pelicula.titulo}".`);
-        return;
+class CatalogoPeliculas {
+    constructor() {
+        this.peliculas = [];
+        this.peliculasGratis = [
+            new Pelicula(6, "Parasite", 0, 2, "images/parasite.jpg"),
+            new Pelicula(7, "1917", 0, 2, "images/1917.jpg"),
+            new Pelicula(8, "Jojo Rabbit", 0, 2, "images/jojo.jpg"),
+            new Pelicula(9, "The Irishman", 0, 2, "images/irishman.jpg"),
+            new Pelicula(10, "Little Women", 0, 2, "images/littlewomen.jpg"),
+        ];
     }
 
-    pelicula.reducirDisponibilidad();
-    usuario.saldo -= costo;
-    guardarSaldo(usuario.saldo); // Guardar saldo actualizado en LocalStorage
+    
+    async cargarPeliculas() {
+        try {
+            document.getElementById('loadingSpinner').style.display = 'block';
+            const response = await fetch('peliculas.json'); // Aquí se simula la llamada a la API
+            if (!response.ok) throw new Error('No se pudieron cargar las películas.');
+            const data = await response.json();
+            this.peliculas = data.map(p => new Pelicula(p.id, p.titulo, p.costo, p.disponible, p.imagen));
+        } catch (error) {
+            Swal.fire({ title: 'Error', text: error.message, icon: 'error' });
+        } finally {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }
+    }
 
-    mostrarMensaje(`Has alquilado "${pelicula.titulo}". Saldo actual: $${usuario.saldo}.`);
-    mostrarPeliculas(); // Actualizar visualización de películas
-};
+    mostrarPeliculas() {
+        const peliculasContainer = document.getElementById('peliculasContainer');
+        peliculasContainer.innerHTML = "";
 
-// *** Mostrar un Mensaje en el Contenedor de Mensajes ***
-const mostrarMensaje = (mensaje) => {
-    const mensajeContainer = document.getElementById('messageContainer');
-    mensajeContainer.textContent = mensaje;
-};
+        [...this.peliculas, ...this.peliculasGratis].forEach((pelicula) => {
+            const { id, titulo, costo, disponible, imagen } = pelicula;
+            const peliculaCard = document.createElement('div');
+            peliculaCard.classList.add('pelicula-card');
+            peliculaCard.innerHTML = `
+                <img src="${imagen}" alt="${titulo}">
+                <h3>${titulo}</h3>
+                <p>Costo: ${costo === 0 ? 'Gratis' : `$${pelicula.calcularCosto()}`}</p>
+                <p>Disponibles: ${disponible}</p>
+                <button data-id="${id}" class="alquilar-btn">Alquilar</button>
+            `;
+            peliculasContainer.appendChild(peliculaCard);
 
-// *** Manejo del Inicio de Sesión ***
-const manejarInicioSesion = () => {
-    const nombreInput = document.getElementById('nombreUsuario');
-    const nombre = nombreInput.value.trim();
+            peliculaCard.querySelector('.alquilar-btn').addEventListener('click', () => {
+                costo === 0 ? this.procesarAlquilerGratis(pelicula) : this.procesarAlquiler(pelicula);
+            });
+        });
+    }
 
+    procesarAlquiler(pelicula) {
+        const mensaje = usuario.saldo >= pelicula.calcularCosto()
+            ? `Has alquilado "${pelicula.titulo}". Saldo actual: $${usuario.saldo}.`
+            : `No tienes suficiente saldo para alquilar "${pelicula.titulo}".`;
+
+        if (usuario.saldo < pelicula.calcularCosto() || pelicula.disponible <= 0) {
+            Swal.fire('Error', mensaje, 'warning');
+            return;
+        }
+
+        pelicula.reducirDisponibilidad();
+        usuario.saldo -= pelicula.calcularCosto();
+
+        this.guardarPeliculasAlquiladas(pelicula);
+        Swal.fire('Película Alquilada', mensaje, 'success');
+        this.mostrarPeliculas();
+        this.mostrarPeliculasAlquiladas();
+    }
+
+    procesarAlquilerGratis(pelicula) {
+        if (pelicula.disponible <= 0) {
+            Swal.fire('Sin Disponibilidad', `Lo siento, "${pelicula.titulo}" no está disponible.`, 'error');
+            return;
+        }
+
+        pelicula.reducirDisponibilidad();
+        this.guardarPeliculasAlquiladas(pelicula);
+        Swal.fire('Película Alquilada', `Has alquilado "${pelicula.titulo}". Es gratis, ¡disfrútala!`, 'success');
+        this.mostrarPeliculas();
+        this.mostrarPeliculasAlquiladas();
+    }
+
+    guardarPeliculasAlquiladas(pelicula) {
+        const peliculasAlquiladas = JSON.parse(localStorage.getItem('peliculasAlquiladas') || '[]');
+        peliculasAlquiladas.push(pelicula);
+        localStorage.setItem('peliculasAlquiladas', JSON.stringify(peliculasAlquiladas));
+    }
+
+    mostrarPeliculasAlquiladas() {
+        const listaPeliculasAlquiladas = document.getElementById('listaPeliculasAlquiladas');
+        listaPeliculasAlquiladas.innerHTML = "";
+
+        const peliculasAlquiladas = JSON.parse(localStorage.getItem('peliculasAlquiladas') || '[]');
+        peliculasAlquiladas.length === 0 && (listaPeliculasAlquiladas.innerHTML = "<p>No has alquilado ninguna película.</p>");
+
+        peliculasAlquiladas.forEach((pelicula) => {
+            const peliculaItem = document.createElement('div');
+            peliculaItem.classList.add('pelicula-alquilada');
+            peliculaItem.innerHTML = `<img src="${pelicula.imagen}" alt="${pelicula.titulo}"><h3>${pelicula.titulo}</h3>`;
+            listaPeliculasAlquiladas.appendChild(peliculaItem);
+        });
+    }
+}
+
+const catalogo = new CatalogoPeliculas();
+
+document.getElementById('btnIniciarSesion').addEventListener('click', async () => {
+    const nombre = document.getElementById('nombreUsuario').value.trim();
     if (!nombre) {
-        mostrarMensaje('Por favor, ingresa un nombre válido.');
+        Swal.fire('Error', 'Por favor, ingresa un nombre válido.', 'warning');
         return;
     }
 
     usuario.nombre = nombre;
-    usuario.saldo = obtenerSaldoInicial(); // Reinicia el saldo al iniciar sesión
-    guardarUsuario(nombre);
-    guardarSaldo(usuario.saldo);
+    usuario.saldo = obtenerSaldoInicial();
+    Swal.fire('Bienvenido', `Hola, ${usuario.nombre}. Tu saldo actual es $${usuario.saldo}.`, 'success');
 
-    mostrarMensaje(`Bienvenido, ${usuario.nombre}! Tu saldo actual es $${usuario.saldo}.`);
-    mostrarPeliculas();
+    await catalogo.cargarPeliculas();
+    catalogo.mostrarPeliculas();
+    catalogo.mostrarPeliculasAlquiladas();
+
     document.getElementById('inicioSesionContainer').style.display = 'none';
     document.getElementById('contenidoPrincipal').style.display = 'block';
-};
+});
 
-// *** Iniciar el Sistema ***
-const iniciarSistema = () => {
-    if (!usuario.nombre) {
-        document.getElementById('inicioSesionContainer').style.display = 'block';
-        document.getElementById('contenidoPrincipal').style.display = 'none';
-    } else {
-        mostrarMensaje(`Bienvenido de nuevo, ${usuario.nombre}! Tu saldo actual es $${usuario.saldo}.`);
-        mostrarPeliculas();
-    }
-};
-
-// *** Inicia el Sistema al Cargar la Página ***
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('btnIniciarSesion').addEventListener('click', manejarInicioSesion);
-    iniciarSistema();
+    document.getElementById('inicioSesionContainer').style.display = 'block';
+    document.getElementById('contenidoPrincipal').style.display = 'none';
 });

@@ -1,44 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Películas</title>
-    <!-- Enlace al archivo CSS -->
     <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
     <div class="container">
-        <!-- Título principal -->
+      
         <div id="inicioSesionContainer">
             <input type="text" id="nombreUsuario" placeholder="Ingresa tu nombre">
             <button id="btnIniciarSesion">Iniciar Sesión</button>
         </div>
+
         <div id="contenidoPrincipal" style="display: none;">
+        
+            <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+
             <div id="messageContainer"></div>
+
             <div id="peliculasContainer"></div>
-        </div>
-        <header>
-            <h1>Catálogo de Películas</h1>
-        </header>
 
-        <!-- Contenedor para mostrar las películas -->
-        <main>
-            <section id="peliculasContainer" class="peliculas">
-                <!-- Las tarjetas de películas se generan dinámicamente con JavaScript -->
-            </section>
-        </main>
-
-        <!-- Contenedor para mostrar mensajes -->
-        <footer>
-            <div>LAS MEJORES PELICULAS</div>
-            <div id="messageContainer" class="message">
-                <!-- Los mensajes dinámicos aparecerán aquí -->
+            <div id="peliculasAlquiladasContainer">
+                <h2>Películas Alquiladas</h2>
+                <div id="listaPeliculasAlquiladas"></div>
             </div>
-        </footer>
+        </div>
     </div>
 
-    <!-- Archivo JavaScript -->
     <script src="./script/script.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@ body {
     background-color: #f4f4f9;
 }
 
-/* Header */
+
 header {
     background-color: #333;
     color: #fff;
@@ -14,15 +14,14 @@ header {
     text-align: center;
 }
 
-/* Main Container */
+
 main {
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    overflow: hidden; /* Prevent horizontal overflow */
+    overflow: hidden;
 }
 
-/* Message Container */
 #messageContainer {
     margin-top: 20px;
     padding: 15px;
@@ -36,7 +35,6 @@ main {
 
 #inicioSesionContainer {
     max-width: 80px;
-
 }
 
 #nombreUsuario {
@@ -45,14 +43,14 @@ main {
     padding-top: 20px;
 }
 
-/* Películas Container */
+
 #peliculasContainer {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
-    max-height: 600px; /* Limit height */
-    overflow-y: auto; /* Add vertical scroll */
+    max-height: 600px;
+    overflow-y: auto;
     border: 1px solid #ddd;
     padding: 10px;
     background-color: #fff;
@@ -60,7 +58,7 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Scrollbar Styling */
+
 #peliculasContainer::-webkit-scrollbar {
     width: 10px;
 }
@@ -74,7 +72,7 @@ main {
     background: #0056b3;
 }
 
-/* Película Card */
+
 .pelicula-card {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -121,13 +119,55 @@ main {
     background-color: #0056b3;
 }
 
-/* Card Hover Effect */
+
 .pelicula-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Footer */
+
+#peliculasAlquiladasContainer {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#listaPeliculasAlquiladas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pelicula-alquilada {
+    width: 150px;
+    text-align: center;
+}
+
+.pelicula-alquilada img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #007bff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
 footer {
     background-color: #333;
     color: #fff;
@@ -139,22 +179,19 @@ footer {
     font-size: 35px;
 }
 
-/* Responsive Design (Media Queries) */
 
-/* Small Devices (Tablets & Phones) */
 @media (max-width: 768px) {
     #peliculasContainer {
         flex-direction: column;
         align-items: center;
-        max-height: 400px; /* Adjust for smaller screens */
+        max-height: 400px;
     }
 
     .pelicula-card {
-        width: 90%; /* Full width for smaller screens */
+        width: 90%;
     }
 }
 
-/* Extra Small Devices (Phones) */
 @media (max-width: 480px) {
     header {
         font-size: 18px;

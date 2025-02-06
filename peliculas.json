@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "titulo": "El laberinto del Fauno",
+        "costo": 5,
+        "disponible": 3,
+        "imagen": "images/fauno.jpg"
+    },
+    {
+        "id": 2,
+        "titulo": "Inception",
+        "costo": 4,
+        "disponible": 3,
+        "imagen": "images/inception.jpg"
+    },
+    {
+        "id": 3,
+        "titulo": "Interstellar",
+        "costo": 6,
+        "disponible": 3,
+        "imagen": "images/interstellar.jpg"
+    },
+    {
+        "id": 4,
+        "titulo": "Matrix",
+        "costo": 3,
+        "disponible": 3,
+        "imagen": "images/matrix.jpg"
+    },
+    {
+        "id": 5,
+        "titulo": "Avatar",
+        "costo": 5,
+        "disponible": 3,
+        "imagen": "images/avatar.jpg"
+    }
+]
